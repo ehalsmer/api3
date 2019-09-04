@@ -1,8 +1,18 @@
 const express = require('express');
 
-const router = express.Router();
+const router = express.Router(); // don't forget to invoke Router();
 
 router.use(express.json());
+
+function uppercaser(req, res, next) {
+    let name = req.params.name;
+
+    if (name) {
+        req.name = name.toUpperCase();
+    }
+    // res.send(`the name is: ${name}`)
+    next()
+}
 
 // this router handles urls that begin with /suppliers
 
@@ -15,9 +25,9 @@ router.get('/', (req, res) => {
 
 // GET to /suppliers/:id
 // the /suppliers part is a given, we only need /:id
-router.get('/:name', (req, res) => {
+router.get('/:name', uppercaser, (req, res) => {
     const { name } = req.params;
-    res.send(`get to /suppliers/${name}`)
+    res.send(`get to /suppliers/${req.name}`)
 })
 
 module.exports = router;
